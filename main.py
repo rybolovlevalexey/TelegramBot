@@ -1,4 +1,6 @@
-def main(a: int, b: int) -> int:
-    return a + b
+import requests
 
-print(main(int(input()), int(input())))
+url = "http://numbersapi.com/"
+res = requests.get(url + "43" + "/trivia")
+print(res.status_code)
+print(res.text)
