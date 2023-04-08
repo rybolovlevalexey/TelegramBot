@@ -16,6 +16,9 @@ bot = Bot(token=file.readline().split()[1])
 dp: Dispatcher = Dispatcher()
 keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(keyboard=[[btn1, btn2]],
                                                     resize_keyboard=True)
+kb_builder = ReplyKeyboardBuilder()
+btns = list(KeyboardButton(text=f"Button {i}") for i in range(10))
+kb_builder.row(*btns, width=5)
 
 async def send_photo_echo(message: Message):
     await message.reply_photo(message.photo[0].file_id)
@@ -40,7 +43,7 @@ async def send_doument(message: Message):
 
 async def send_sticker(message: Message):
     await message.answer("Прислан стикер")
-    await message.reply_sticker(message.sticker.file_id)
+    await message.reply_sticker(message.sticker.file_id, reply_markup=kb_builder.as_markup(resize_keyboard=True))
 
 # в диспетчере указывается, на какие сообщения, как реагировать
 dp.message.register(process_start_command, Command(commands=['start']))
