@@ -24,7 +24,8 @@ async def process_help_command(message: Message):
                          'надо добавлять')
 
 async def give_sql_command(message: Message):
-    pass
+    with open("plug answer file.sql", "rb") as sql_file:
+        await bot.send_document(chat_id=message.chat.id, document=sql_file)
 
 async def send_doument(message: Message):
     await message.answer("Прислан документ на обработку")
@@ -36,9 +37,10 @@ async def download_excel(excel_file_id):
     file_url = f"https://api.telegram.org/file/bot{bot.token}/{file_info.file_path}"
     async with aiohttp.ClientSession() as session:
         async with session.get(file_url) as response:
-            content = await response.read()
-            data_frame = pandas.read_excel(content, engine="openpyxl")
-            print(data_frame.head())
+            #content = await response.read()
+            with open('file.xlsx', 'wb') as file:
+                file.write(response.content)
+
 
 # в диспетчере указывается, на какие сообщения, как реагировать
 dp.message.register(process_start_command, Command(commands=['start']))
