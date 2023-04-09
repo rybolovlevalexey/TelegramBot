@@ -17,12 +17,12 @@ file_companies = open("info about companies.txt")
 
 # <name>: <столбцы для скачивания через точку с запятой без пробелов>
 
-async def set_main_menu(tgbot: Bot):
+async def set_main_menu(bot: Bot):
     main_menu_commands = [BotCommand(command="/start", description="Используйте для запуска бота"),
                           BotCommand(command="/help",
                                      description="Получение информации о работе бота"),
                           BotCommand(command="/give_sql", description="Получение общего sql файла")]
-    await tgbot.set_my_commands(main_menu_commands)
+    await bot.set_my_commands(main_menu_commands)
 
 
 async def process_start_command(message: Message):
@@ -51,7 +51,7 @@ async def download_excel(excel_file_id):
     async with aiohttp.ClientSession() as session:
         async with session.get(file_url) as response:
             # content = await response.read()
-            with open('file.xlsx', 'wb') as file:
+            with open('file.xlsb', 'wb') as file:
                 file.write(response.content)
 
 
@@ -62,4 +62,5 @@ dp.message.register(give_sql_command, Command(commands=['give_sql']))
 dp.message.register(send_doument, F.content_type == ContentType.DOCUMENT)
 
 if __name__ == "__main__":
+    dp.startup.register(set_main_menu)
     dp.run_polling(bot)
